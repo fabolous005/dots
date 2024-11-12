@@ -1,0 +1,38 @@
+(defpoll apod_info :interval "600s" :initial "[]" `python ~/coding/python/apod_formatter.py "$(cat ~/.apod_info)" 80`)
+(defvar show_apod_info false)
+(defpoll apod_title :interval "600s" `cat ~/.apod_title`)
+
+(defwidget apod []
+	(box
+		:orientation "vertical"
+		:space-evenly false
+		(image
+			:path "/home/fabian/.apod.jpg"
+			:image-width 610
+			:image-height 610
+		)
+		(revealer
+			:transition "slidedown"
+			:reveal {apod_info != "" && show_apod_info}
+			:duration "1s"
+			(box
+				:orientation "vertical"
+				:spacing 8
+				:space-evenly false
+				:class "apod_info_box"
+				(label
+					:text apod_title
+					:halign "center"
+					:class "apod_title"
+				)
+				(for chunk in apod_info
+					(label
+						:text chunk
+						:halign "center"
+						:class "apod_info"
+					)
+				)
+			)
+		)
+	)
+)

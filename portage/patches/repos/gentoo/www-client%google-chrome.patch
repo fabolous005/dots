@@ -1,0 +1,33 @@
+diff --git a/www-client/google-chrome/google-chrome-130.0.6723.116.ebuild b/www-client/google-chrome/google-chrome-130.0.6723.116.ebuild
+index a6673ff33..3542bc4d4 100644
+--- a/www-client/google-chrome/google-chrome-130.0.6723.116.ebuild
++++ b/www-client/google-chrome/google-chrome-130.0.6723.116.ebuild
+@@ -39,7 +39,7 @@ RDEPEND="
+ 	>=dev-libs/nss-3.26
+ 	media-fonts/liberation-fonts
+ 	media-libs/alsa-lib
+-	media-libs/mesa[gbm(+)]
++	media-libs/mesa
+ 	net-misc/curl
+ 	net-print/cups
+ 	sys-apps/dbus
+@@ -48,17 +48,10 @@ RDEPEND="
+ 	x11-libs/cairo
+ 	x11-libs/gdk-pixbuf:2
+ 	|| (
+-		x11-libs/gtk+:3[X]
+-		gui-libs/gtk:4[X]
++		x11-libs/gtk+:3
++		gui-libs/gtk:4
+ 	)
+ 	x11-libs/libdrm
+-	>=x11-libs/libX11-1.5.0
+-	x11-libs/libXcomposite
+-	x11-libs/libXdamage
+-	x11-libs/libXext
+-	x11-libs/libXfixes
+-	x11-libs/libXrandr
+-	x11-libs/libxcb
+ 	x11-libs/libxkbcommon
+ 	x11-libs/libxshmfence
+ 	x11-libs/pango

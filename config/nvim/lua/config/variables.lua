@@ -1,0 +1,48 @@
+-- TODO: merge these and adjust icons should have no space
+
+local M = {}
+
+M.icons = {
+  kinds = {
+    Array = { " ", "#c89d7c" },
+    Boolean = { "󰨙 ", "#480905" },
+    Class = { " ", "#002b4d" },
+    Codeium = { "󰘦 ", "#97e8ca" },
+    Color = { " ", "#f2ff00" },
+    Control = { " ", "#fc5603" },
+    Collapsed = { " ", "#135DD8" },
+    Constant = { "󰏿 ", "#fa9c1b" },
+    Constructor = { " ", "#767676" },
+    Copilot = { " ", "#97e8ca" },
+    Enum = { " ", "#a0522d" },
+    EnumMember = { " ", "#006E33" },
+    Event = { " ", "#ff9913" },
+    Field = { " ", "#006E33" },
+    File = { " ", "#ffffff" },
+    Folder = { " ", "##90CAF9" },
+    Function = { "󰊕 ", "#C724B1" },
+    Interface = { " ", "#002b4d" },
+    Key = { " ", "#30B700" },
+    Keyword = { " ", "#9B26B6" },
+    Method = { "󰊕 ", "#C724B1" },
+    Module = { " ", "#00AEEF" },
+    Namespace = { "󰦮 ", "#002b4d" },
+    Null = { " ", "#333333" },
+    Number = { "󰎠 ", "#FF6D6A" },
+    Object = { " ", "#006E33" },
+    Operator = { " ", "#a0522d" },
+    Package = { " ", "#00AEEF" },
+    Property = { " ", "#006E33" },
+    Reference = { " ", "#135DD8" },
+    Snippet = { " ", "#00B2A9" },
+    String = { " ", "#046A38" },
+    Struct = { "󰆼 ", "#CD001A" },
+    TabNine = { "󰏚 ", "#8031A7" },
+    Text = { " ", "#30B700" },
+    TypeParameter = { " ", "#BD9A7A" },
+    Unit = { " ", "#046A38" },
+    Value = { " ", "#30B700" },
+    Variable = { "󰀫 ", "#B67233" },
+  },
+}
+return M

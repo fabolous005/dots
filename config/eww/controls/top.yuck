@@ -1,0 +1,198 @@
+(defpoll wifi :interval "1s" "cat /sys/class/net/wlo*/carrier | head -1")
+(defpoll wifi-ssid :interval "2s" `iw dev wlo0 link | rg SSID | sed 's/SSID://' | xargs`)
+
+(defpoll bluetooth :interval "1s" `pidof bluetoothd | wc -l`)
+(defpoll bluetooth-device :interval "2s" `timeout 0.3s bluetoothctl info | rg Name | sed 's/Name://' | xargs | head -1`)
+
+(defpoll hotspot :interval "1s"
+	`if [[ $(iwctl ap list | tail -n-2 | head -n-1) == *"No devices"* ]]; then echo 0; else echo 1; fi`
+)
+(defpoll hotspot-number :interval "2s" `
+	num=$(($(iwctl ap wlo0 show | wc -l)/10));
+	if [ "$num" -gt 0 ]; then
+		num=$((num -1));
+	fi;
+	echo "$num"
+`)
+
+(defpoll vpn :interval "1s" `pidof openvpn | wc -l`)
+
+(defvar stack-index 0)
+
+(defpoll cpuusage :initial 0 :interval "5s" `echo $(top -bn2 | grep '%Cpu' | tail -1 | awk '{print 100-$8}')`)
+
+(defpoll memoryusage :initial 0 :interval "5s" `free | grep Mem | awk '{print $3/$2 * 100.0}'`)
+
+(defpoll temperature :initial 0 :interval "5s" `
+echo $(($(cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon10/temp1_input) / 1000 - 20))
+`)
+
+(defpoll battery :initial 0 :interval "5s" `
+cat /sys/class/power_supply/BAT0/capacity
+`)
+(defpoll charging :initial 0 :interval "5s" `
+cat /sys/class/power_supply/AC/online
+`)
+
+
+
+(defwidget top []
+	(box
+		:orientation "horizontal"
+		;; :halign "center"
+		:space-evenly false
+		:spacing 10
+		(top_left)
+		(top_right)
+	)
+)
+
+;; TODO: maybe add a parameter for icon alignment
+(defwidget ccbutton [symbol symbol-not condition name ?comment onclick onhover]
+	(overlay
+		(box
+			:class "button"
+			:spacing 20
+			:space-evenly false
+			(label
+				:text { condition ? symbol : symbol-not }
+				:class "icon"
+				:style "background-color: ${ condition ? "#0079FE" : "#6E6E6E" }"
+			)
+			(box
+				:orientation "vertical"
+				(label
+					:text name
+					:xalign 0
+				)
+				(label
+					:visible { comment == "" ? false : true && condition ? true : false }
+					:text comment
+					:xalign 0
+					:class "comment"
+				)
+			)
+		)
+		(eventbox
+			:onclick onclick
+			:onhover onhover
+			:class "eventbox"
+			:cursor "pointer"
+		)
+	)
+)
+
+
+
+
+
+(defwidget top_left []
+	(box
+		:class "widget left"
+		:orientation "vertical"
+		:vexpand false
+		:valign "start"
+		;; TODO: review condition
+		(ccbutton
+			:symbol "󰖩"
+			:symbol-not "󰖪"
+			:condition { wifi == 1 ? true : false }
+			:name "Wi-Fi"
+			:comment { wifi == 1 ? wifi-ssid : ""}
+			;; :onclick "notify-send onclick works"
+			:onclick "${EWW_CMD} update stack-index=0"
+			:onhover "${EWW_CMD} update stack-index=1"
+		)
+		(ccbutton
+			:symbol "󰂯"
+			:symbol-not "󰂲"
+			:condition { bluetooth == 1 ? true : false }
+			:name "Bluetooth     "
+			:comment bluetooth-device
+			:onclick { bluetooth == 1 ? "doas killall bluetoothd" : "doas rc-service bluetooth restart" }
+			:onhover "${EWW_CMD} update stack-index=2"
+		)
+		(ccbutton
+			:symbol "󰛳"
+			:symbol-not "󰲛"
+			:condition { hotspot == 1 ? true : false }
+			:name "Hotspot"
+			:comment "${hotspot-number} device${hotspot-number == 1 ? "" : "s"} connected"
+			:onclick "notify-send onclick works"
+			:onhover "${EWW_CMD} update stack-index=2"
+		)
+	(ccbutton
+			:symbol "󰌷"
+			:symbol-not "󰌸"
+			:condition { vpn == 1 ? true : false }
+			:name "VPN"
+			:comment ""
+			:onclick "notify-send onclick works"
+			:onhover "${EWW_CMD} update stack-index=3"
+		)
+	)
+)
+
+
+(defwidget top_right []
+	(box
+		:width 250
+		:orientation "horizontal"
+		:class "widget"
+		:spacing 15
+		:halign "fill"
+		:valign "fill"
+		(box
+			:orientation "vertical"
+			:spacing 15
+			:halign "fill"
+			:valign "fill"
+			(circular-progress
+				:thickness 15
+				:value cpuusage
+				:start-at 75
+				:clockwise false
+				(label
+					:text ""
+					:style "font-size: 25px;margin-right: 8px;font-weight: normal;"
+				)
+			)
+			(circular-progress
+				:thickness 15
+				:value memoryusage
+				:start-at 75
+				:clockwise false
+				(label
+					:text ""
+					:style "font-family: FiraCode Nerd Font;font-size: 25px;margin-right: 5px;font-weight:normal;"
+				)
+			)
+		)
+		(box
+			:orientation "vertical"
+			:spacing 15
+			:halign "fill"
+			:valign "fill"
+			(circular-progress
+				:thickness 15
+				:value temperature
+				:start-at 75
+				:clockwise false
+				(label
+					:text ""
+					:style "font-size: 25px;font-weight:normal;"
+				)
+			)
+			(circular-progress
+				:thickness 15
+				:value battery
+				:start-at 75
+				:clockwise false
+				(label
+					:text { charging == 1 ? "" : (battery == 100 ? "" : (battery >= 70 ? "" : (battery >= 40 ? "" : (battery >= 10 ? "" : "")))) }
+					:style "font-size: 25px;margin-right: ${charging == 1 ? "6" : "8"}px;font-weight:normal;"
+				)
+			)
+		)
+	)
+)

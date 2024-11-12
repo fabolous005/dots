@@ -1,0 +1,4 @@
+media-sound/playerctl introspection
+media-sound/alsa-utils -libsamplerate
+media-sound/spotify pulseaudio
+media-sound/ncmpcpp clock visualizer outputs

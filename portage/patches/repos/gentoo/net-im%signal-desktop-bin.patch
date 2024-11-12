@@ -1,0 +1,21 @@
+diff --git a/net-im/signal-desktop-bin/signal-desktop-bin-7.32.0.ebuild b/net-im/signal-desktop-bin/signal-desktop-bin-7.32.0.ebuild
+index 1ce02a143..b4f857797 100644
+--- a/net-im/signal-desktop-bin/signal-desktop-bin-7.32.0.ebuild
++++ b/net-im/signal-desktop-bin/signal-desktop-bin-7.32.0.ebuild
+@@ -27,13 +27,13 @@ RDEPEND="
+ 	dev-libs/nss
+ 	>=media-fonts/noto-emoji-20231130
+ 	media-libs/alsa-lib
+-	media-libs/mesa[X(+)]
++	media-libs/mesa
+ 	net-print/cups
+-	sys-apps/dbus[X]
++	sys-apps/dbus
+ 	virtual/udev
+ 	x11-libs/cairo
+ 	x11-libs/gdk-pixbuf:2
+-	x11-libs/gtk+:3[X]
++	x11-libs/gtk+:3
+ 	x11-libs/libdrm
+ 	x11-libs/libX11
+ 	x11-libs/libxcb

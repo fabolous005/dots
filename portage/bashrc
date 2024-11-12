@@ -1,0 +1,34 @@
+status() {
+	[ $1 -eq 0 ] && {
+		einfo "bashrc hook for ${PN} returned successfully" && echo
+	} || {
+		eerror "bashrc hook for ${PN} failed" && echo && exit 1
+	}
+}
+
+post_src_install() {
+        if [[ "${PN}" == "vesktop-bin" ]]; then
+		sed -i 's/Exec=\/usr\/bin\/vesktop-bin/Exec=\/usr\/bin\/vesktop-bin --ozone-platform-hint=wayland/' \
+			${D}/usr/share/applications/vesktop-bin.desktop
+		status $?
+	elif [[ "${CATEGORY}"/"${PN}" == "media-video/pipewire" ]]; then
+		# sed -i '/GENTOO_PIPEWIRE_PULSE_LOG/d' ${D}/usr/bin/gentoo-pipewire-launcher && \
+		sed -i '$d' ${D}/usr/bin/gentoo-pipewire-launcher && \
+			echo '/usr/bin/wireplumber 1>>"${GENTOO_WIREPLUMBER_LOG}" 2>&1 &' >> ${D}/usr/bin/gentoo-pipewire-launcher && \
+			echo 'sleep 3 && /usr/bin/pw-link "spotify_router" "alsa_output.usb-Kingston_HyperX_Virtual_Surround_Sound_00000000-00.analog-stereo"' >> ${D}/usr/bin/gentoo-pipewire-launcher
+		status $?
+	elif [[ "${PN}" == "geogebra-bin" ]]; then
+		sed -i 's/Exec=geogebra/Exec=geogebra --enable-features=UseOzonePlatform --ozone-platform=wayland/' \
+			${D}/usr/share/applications/geogebra-${PN}.desktop
+		status $?
+	fi
+}
+
+# pre_src_configure() {
+# 	if [[ "$PN" == "ags" ]]; then
+# 		sed -i "/dependency('libpulse', version: '>= 12.99.3')/d; /dependency('libpulse-mainloop-glib')/d" \
+# 			meson.build
+# 	fi
+# }
+
+# TODO: create $DISTFILES patch function during ebuild pwd=/var/tmp/portage/net-im/vesktop-bin-1.5.3/work/vesktop-1.5.3

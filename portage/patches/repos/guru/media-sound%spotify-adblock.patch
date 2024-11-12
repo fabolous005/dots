@@ -1,0 +1,13 @@
+diff --git a/media-sound/spotify-adblock/spotify-adblock-1.0.3.ebuild b/media-sound/spotify-adblock/spotify-adblock-1.0.3.ebuild
+index debfdfc..dbcf81e 100644
+--- a/media-sound/spotify-adblock/spotify-adblock-1.0.3.ebuild
++++ b/media-sound/spotify-adblock/spotify-adblock-1.0.3.ebuild
+@@ -63,7 +63,7 @@ src_install(){
+ 	dobin "${T}/spotify-adblock"
+ 
+ 	# library
+-	newlib.so target/$(usex debug debug release)/libspotifyadblock.so ${PN}.so
++	newlib.so target/x86_64-unknown-linux-gnu/$(usex debug debug release)/libspotifyadblock.so ${PN}.so
+ 
+ 	# config
+ 	insinto "/etc/${PN}"

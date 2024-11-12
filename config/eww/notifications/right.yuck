@@ -1,0 +1,66 @@
+(defpoll hour :interval "1s" `date "+\%H"`)
+(defpoll minute :interval "1s" `date "+\%M"`)
+(defpoll day :interval "1s" `date "+\%d"`)
+(defpoll month :interval "1s" `date "+\%m"`)
+(defpoll year :interval "1s" `date "+\%Y"`)
+(defpoll day_written :interval "1s" `date "+\%A"`)
+(defpoll month_written :interval "1s" `date "+\%B"`)
+
+
+(defwidget right []
+	(box
+		:orientation "vertical"
+		:spacing 10
+		:space-evenly false
+		(my_calendar)
+		(time)
+	)
+)
+
+(defwidget my_calendar []
+	(box
+		:orientation "vertical"
+		:spacing 10
+		:space-evenly false
+		(calendar
+			;; :day day
+			;; :month month
+			;; :year year
+			;; :show-details true
+			:show-heading false
+			:show-day-names false
+			;; :show-week-numbers true
+			:onclick ""
+			;; :style "font-family: Switzerland"
+			:class "calendar"
+		)
+	)
+)
+
+(defwidget time []
+	(box
+		:orientation "vertical"
+		:space-evenly false
+		(box
+			:orientation "horizontal"
+			:halign "center"
+			:spacing 15
+			(label
+				:text hour
+				:style "font-size: 50px;"
+			)
+			(label
+				:text minute
+				:style "font-size: 50px; color: rgba(218, 218, 218, 0.8);"
+			)
+		)
+		(label
+			:text "${day}   ${month}   ${year}"
+			:style "font-size: 26px;"
+		)
+		(label
+			:text "${day_written}, ${month_written}"
+			:style "font-size: 20px; margin-top: 5px; font-family: Switzerland"
+		)
+	)
+)

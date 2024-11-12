@@ -1,0 +1,248 @@
+(deflisten brightness :initial 0 `
+head -n 1 /sys/class/backlight/intel_backlight/brightness
+while inotifywait -qq -e modify /sys/class/backlight/intel_backlight/brightness; do
+  head -n 1 /sys/class/backlight/intel_backlight/brightness
+done
+`)
+
+(defpoll sound :interval "0.3s" `
+wpctl status | sed -n '/Sinks:/,/Sources:/p' | rg '\\*' | rg 'vol: ....' -o | awk '{ gsub(/^0\./, "", $2); print $2 }'
+`)
+
+(deflisten fanspeed :initial 0 `
+cat /proc/acpi/ibm/fan | rg 'level:' |  awk '{print $2}'
+while inotifywait -qq -e modify /proc/acpi/ibm/fan; do
+	cat /proc/acpi/ibm/fan | rg 'level:' |  awk '{print $2}'
+done
+`)
+
+(defpoll ledstatus :interval "0.5s" :initial 0 `
+cat /sys/class/leds/tpacpi::kbd_backlight/brightness
+`)
+
+;; playerctl metadata -p spotify -F -f '{"title": "{{title}}", "artist": "{{artist}}", "artUrl": "{{mpris:artUrl}}", "status": "{{status}}", "human_position": "{{duration(position)}}", "human_duration": "{{duration(mpris:length)}}", "position": "{{position}}", "duration": "{{mpris:length}}"}'
+
+(deflisten music
+	:initial "{}"
+	`python3 ~/coding/python/playerctl-helper.py`
+)
+;;
+(defpoll show-music :initial 0 :interval "1s" `pidof spotify | wc -l`)
+
+
+(defwidget center []
+	(box
+		:orientation "vertical"
+		:space-evenly false
+		(brightness)
+		(sound)
+		(fanspeed)
+		(leds)
+		(music)
+	)
+	;; Weather
+)
+
+(defwidget brightness []
+	(box
+		:class "slider_box"
+		(overlay
+			;; :orientation "vertical"
+
+			(scale
+				:class "slider"
+				:halign "center"
+				:active true
+				:orientation "horizontal"
+				:onchange "echo {} >> /sys/class/backlight/intel_backlight/brightness"
+				:value brightness
+				:min 1
+				:max 19393
+				:vexpand true
+				:halign "fill"
+			)
+			(label
+				:text ""
+				:style "color: #0079fe;"
+				:xalign 0.03
+			)
+		)
+	)
+)
+
+(defwidget sound []
+	(box
+		:class "slider_box"
+		(overlay
+			;; :orientation "vertical"
+			(scale
+				:class "slider"
+				:halign "center"
+				:active true
+				:orientation "horizontal"
+				:onchange "wpctl set-volume $(wpctl status | sed -n '/Sinks:/,/Sources:/p' | rg '\\*' | awk '{ print $3 }') 0.{}"
+				:value sound
+				:min 0
+				:max 101
+				:vexpand true
+				:halign "fill"
+			)
+			(label
+				:text ""
+				:style "color: #0079fe;"
+				:xalign 0.03
+			)
+		)
+	)
+)
+
+(defwidget fanspeed []
+	(box
+		:class "slider_box"
+		(overlay
+			(scale
+				:class "slider"
+				:halign "center"
+				:active true
+				:orientation "horizontal"
+				:onchange "echo level {} > /proc/acpi/ibm/fan"
+				:value { fanspeed == "auto" ? 4 : fanspeed }
+				:css { fanspeed == "auto" ? ".slider trough highlight {background-color: rgba(255,255,255, 0.4)}" : ""}
+				:min 0
+				:max 8
+				:vexpand true
+				:halign "fill"
+			)
+			(label
+				:text "󰈐"
+				:style "color: #0079fe;"
+				:xalign 0.03
+			)
+		)
+	)
+)
+
+(defwidget leds []
+	(box
+		:class "slider_box"
+		(overlay
+			(scale
+				:class "slider"
+				:halign "center"
+				:active true
+				:orientation "horizontal"
+				:onchange "echo {} > /sys/class/leds/tpacpi::kbd_backlight/brightness"
+				:value ledstatus
+				:min 0
+				:max 3
+				:vexpand true
+				:halign "fill"
+			)
+			(label
+				:text { ledstatus == 0 ? "󰌮" : ( ledstatus == 1 ? "󰌫" : "󰌬" ) }
+				:style "color: #0079fe;"
+				:xalign 0.03
+			)
+		)
+	)
+)
+
+(defwidget music []
+    (box
+		:class "music"
+		:orientation "h"
+		:space-evenly false
+		:visible { music.title == "" ? false: true && show-music == 0 ? false : true }
+		;; TODO: make this an overlay to enable reloading of pictures
+		(image
+			:path "/home/fabian/.cache/mpris_art.jpeg"
+			:image-width 120
+			:image-height 120
+			:vexpand false
+			:style "border-radius: 10px"
+			;; :visible false
+		)
+		(box
+			:orientation "vertical"
+			:hexpand true
+			:vexpand true
+			:space-evenly "false"
+			:spacing 5
+			:halign "fill"
+			:valign "center"
+			(box
+				:orientation "horizontal"
+				:space-evenly false
+				:halign "start"
+				:spacing { music.artist == "" ? 0 : 10 }
+				:style "margin-left: 15px;"
+				(label
+					:class "musictitle"
+					:text { music.title }
+					:valign "end"
+					:halign "start"
+					:truncate true
+				)
+				(label
+					:class "musictitle"
+					:text "–"
+					:truncate-left false
+					:visible { music.artist != "" }
+				)
+				(label
+					:class "musictitle"
+					:text { music.artist }
+					:truncate false
+					:visible { music.artist != "" }
+					:style "margin-right: 20px;"
+				)
+			)
+			(box
+				:orientation "horizontal"
+			    ;; :class "slider"
+                :space-evenly false
+                :halign "fill"
+				:spacing 10
+				:hexpand true
+				:style "margin-left: 15px; margin-right: 15px;"
+				:visible { music.percent != "" && music.position != "" && music.duration != "" }
+                (label
+					:text { music.position }
+				)
+                (scale
+					:min 0
+                    :max 101
+					:class "music_slider"
+					:hexpand true
+					;; :height 20
+                    :value { music.percent ?: 0 }
+					:halign "fill"
+					:onchange "python3 ~/coding/python/playerctl-helper.py {}"
+				)
+                (label
+					:text { music.duration }
+				)
+            )
+            (box
+				:orientation "horizontal"
+				:halign "center"
+				:spacing 30
+                (button
+					:class "icon"
+					:onclick "playerctl previous &"
+					"󰒮"
+				)
+                (button
+					:class "icon"
+					:onclick "playerctl play-pause &"
+					{ music.status != "Paused" ? "󰏤" : "󰐊" }
+				)
+                (button
+					:class "icon"
+					:onclick "playerctl next &"
+					"󰒭"
+				)
+            )
+        )
+    )	
+)

@@ -1,0 +1,26 @@
+.calendar {
+  font-size: 18px;
+  // padding: 15px 10px 0 10px;
+  padding: 5px 10px;
+  padding-top: 5px;
+  // margin-bottom: -22px;
+  font-weight: normal;
+
+  &:selected {
+    color: purple;
+    // color: #0079FE;
+    font-weight: bolder;
+    font-size: 16px;
+    border-radius: 15%;
+    background-color: #0079FE;
+  }
+
+  &:indeterminate {
+    // color: rgba(C7C7C7, 0.9);
+    color: rgba(100, 100, 100, 0.9);
+  }
+}
+
+.calendar day {
+  padding: 5px;
+}

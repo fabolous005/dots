@@ -1,0 +1,75 @@
+(defpoll notifications :interval "1s" :initial `{"data": [[]]}` "dunstctl history")
+(defvar notification_close_hover false)
+(defvar my_arraylength 0)
+
+(defwidget left []
+	(box
+		:orientation "vertical"
+		:spacing 5
+		:visible { notifications?.data[0] == "[]" ? false : true }
+		:class "notification-box"
+		:vexpand false
+		(scroll
+			:hscroll false
+			:vscroll true
+			:hexpand false
+			:vexpand false
+			:style "background-color: rgba(255, 255, 255, 0.0);"
+			(box
+				:orientation "vertical"
+				:valign "start"
+				:space-evenly false
+				(for notification in {notifications.data[0]}
+					(eventbox
+						:class "single-notification"
+						:onclick { notification_close_hover == false ? `dunstify Action "Whole Notification"` : ":" }
+						:vexpand false
+						:style `${arraylength(notifications.data[0]) == 1 ? "" : "box-shadow: 0 -4px 1px -3.5px rgba(255,255,255,0.5);"}`
+						(box
+							:class "single-notification"
+							:orientation "vertical"
+							:space-evenly false
+							:vexpand true
+							(box
+								:orientation "horizontal"
+								:space-evenly false
+								(eventbox
+									;; :on-click "dunstctl pop ${notification["id"]["data"]}"
+									:width 20
+									:height 20
+									:onclick `dunstctl history-rm ${notification["id"]["data"]}`
+									:onhover "${EWW_CMD} update notification_close_hover=true"
+									:onhoverlost "${EWW_CMD} update notification_close_hover=false"
+									:class "notification-close"
+									"󰅖"
+								)
+								(box
+									:halign "center"
+									:hexpand true
+									:space-evenly false
+									(label
+										:text "${notification["appname"]["data"]} -"
+										:style "font-size: 13px; color: rgba(129, 129, 129, 0.9); margin-left: 10px"
+									)
+									(label
+										:text "${notification["summary"]["data"]}"
+										:style "margin: 0 4px; font-size: 15px;"
+										:limit-width 50
+										:show-truncated true
+									)
+								)
+							)
+							(label
+								:text {notification["body"]["data"]}
+								:style "font-size: 12px; margin: 0 8px;"
+								:show-truncated true
+								:truncate true
+								:width {strlength(notification["body"]["data"]) < 50 ? 300 : 500}
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+)

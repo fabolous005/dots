@@ -1,0 +1,15 @@
+* {
+    all: unset;
+    font-family: JetBrainsMono;
+    font-weight: bold;
+}
+
+.background {
+  background-color: transparent;
+}
+
+@import "controls/window.scss"
+@import "notifications/window.scss"
+@import "infos/window.scss"
+@import "quote/window.scss"
+// @import "bar/window.scss"

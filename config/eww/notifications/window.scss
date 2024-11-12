@@ -1,0 +1,17 @@
+.notifications {
+  // background-color: rgba(0, 0, 0, 0.5);
+  // #0F0F17
+  // background-color: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  // box-shadow: 0 0 4px 2px #000000;
+}
+
+.notification_stack {
+  box-shadow: 0 0 4px 2px #ffffff;
+  margin: 4px 8px 8px 8px;
+  border-radius: 15px;
+  background-color: rgba(15, 15, 23, 0.8);
+}
+
+@import "right.scss"
+@import "left.scss"

@@ -1,0 +1,13 @@
+diff --git a/usr/share/spotify/spotify.desktop b/usr/share/spotify/spotify.desktop
+index e0b60ee..67f5d1e 100644
+--- a/usr/share/spotify/spotify.desktop
++++ b/usr/share/spotify/spotify.desktop
+@@ -4,7 +4,7 @@ Name=Spotify
+ GenericName=Music Player
+ Icon=spotify-client
+ TryExec=spotify
+-Exec=spotify %U
++Exec=env LD_PRELOAD=/usr/lib64/spotify-adblock.so spotify --enable-features=UseOzonePlatform --ozone-platform=wayland %U
+ Terminal=false
+ MimeType=x-scheme-handler/spotify;
+ Categories=Audio;Music;Player;AudioVideo;

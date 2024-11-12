@@ -1,0 +1,24 @@
+# required by app-office/libreoffice-24.2.6.2::gentoo
+# required by libreoffice (argument)
+>=dev-libs/boost-1.85.0-r1 nls
+# required by app-office/libreoffice-24.2.6.2::gentoo
+# required by libreoffice (argument)
+>=dev-libs/xmlsec-1.3.4 nss
+# required by app-office/libreoffice-24.2.6.2::gentoo
+# required by libreoffice (argument)
+>=media-libs/harfbuzz-9.0.0 icu
+# required by x11-libs/gtk+-3.24.42-r1::gentoo
+# required by app-office/libreoffice-24.2.6.2::gentoo[gtk]
+# required by libreoffice (argument)
+>=media-libs/libepoxy-1.5.10-r3 X
+# required by x11-libs/gtk+-3.24.42-r1::gentoo
+# required by app-office/libreoffice-24.2.6.2::gentoo[gtk]
+# required by libreoffice (argument)
+>=x11-libs/cairo-1.18.2 X
+# required by app-office/libreoffice-24.2.6.2::gentoo[gtk]
+# required by libreoffice (argument)
+>=x11-libs/gtk+-3.24.42-r1 X
+# required by virtual/opengl-7.0-r2::gentoo
+# required by app-office/libreoffice-24.2.6.2::gentoo
+# required by libreoffice (argument)
+>=media-libs/mesa-24.2.2 X

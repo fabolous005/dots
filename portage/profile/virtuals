@@ -1,0 +1,8 @@
+# Specify package for virtuals
+# virtual/example exmple-for/package
+virtual/cron			sys-process/dcron
+virtual/dist-kernel		sys-kernel/gentoo-kernel
+virtual/editor			app-editors/neovim
+virtual/notification-daemon	x11-misc/dunst
+virtual/ooo			app-office/libreoffice
+virtual/rust			dev-lang/rust

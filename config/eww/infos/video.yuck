@@ -1,0 +1,43 @@
+(defpoll video_paths :interval "60s" :initial "{}" "~/coding/bash/background.sh videos")
+
+(defwidget video []
+	(scroll
+		:hscroll false
+		:vscroll true
+		:height 600
+		(box
+	;; 		;; :visible {video_paths != ""}
+			:orientation "vertical"
+			:spacing 10
+			:space-evenly false
+			(for video in video_paths
+				(box
+					:orientation "horizontal"
+					:spacing 10
+					(eventbox
+						:onclick "~/coding/bash/eww_background.sh ${video[0]} &"
+						;; (literal
+						;; 	:content {video[0] != "null" ? `(image :path "${video[0]}" :image-width 300 :image-height 200)` : ""}
+						;; )
+						(image
+							:path {video[0]}
+							:image-width 300
+							:image-height 200
+						)
+					)
+					(eventbox
+						:onclick "~/coding/bash/eww_background.sh ${video[1]}&"
+						;; (literal
+						;; 	:content {video[1] != "null" ? `(image :path "${video[1]}" :image-width 300 :image-height 200)` : ""}
+						;; )
+						(image
+							:path {video[1]}
+							:image-width 300
+							:image-height 200
+						)
+					)
+				)
+			)
+		)
+	)
+)

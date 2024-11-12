@@ -1,0 +1,18 @@
+CC="gcc"
+CXX="g++"
+CPP="cpp"
+CXX="c++"
+
+AR="${CHOST}-ar"
+NM="${CHOST}-nm"
+RANLIB="${CHOST}-ranlib"
+
+COMMON_FLAGS="-march=alderlake -O3 -pipe -flto -mabm -mno-cldemote -mno-kl -mno-sgx -mno-widekl -mshstk --param=l1-cache-line-size=64 --param=l1-cache-size=32 --param=l2-cache-size=36864"
+MAKEOPTS="--jobs 32 --load-average 34"
+
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+
+LDFLAGS="-flto"

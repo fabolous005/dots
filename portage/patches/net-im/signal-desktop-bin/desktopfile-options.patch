@@ -1,0 +1,12 @@
+diff --git a/usr/share/applications/signal-desktop.desktop b/usr/share/applications/signal-desktop.desktop
+index 7b09057..292309d 100644
+--- a/usr/share/applications/signal-desktop.desktop
++++ b/usr/share/applications/signal-desktop.desktop
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Name=Signal
+-Exec=/opt/Signal/signal-desktop --no-sandbox %U
++Exec=/opt/Signal/signal-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland --use-tray-icon --no-sandbox %U
+ Terminal=false
+ Type=Application
+ Icon=signal-desktop

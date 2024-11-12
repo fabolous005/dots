@@ -1,0 +1,2 @@
+# use default unwind option on panic
+RUSTFLAGS="-C debuginfo=0 -C codegen-units=32 -C target-cpu=native -C opt-level=3 -C linker=clang -C link-arg=-fuse-ld=/usr/bin/mold"

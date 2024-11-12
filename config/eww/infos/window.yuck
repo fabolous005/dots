@@ -1,0 +1,124 @@
+(include "infos/wallpaper.yuck")
+(include "infos/video.yuck")
+(include "infos/apod.yuck")
+(include "infos/chesspuzzle.yuck")
+
+(defvar info_stack_index 0)
+(defpoll apod_status :interval "10s" "cat ~/.apod_status")
+(defpoll chess_puzzle_status :interval "10s" "cat ~/.chess-puzzle-status")
+(defpoll chess_wasonline :interval "10s" "~/.local/bin/chesscom-puzzle.sh wasonline")
+
+(defwindow infos
+	:monitor '["1", "0"]'
+	:geometry (geometry
+		:x "18"
+		:y "2"
+		:anchor "top left"
+	)
+	:stacking "fg"
+	:wm-ignore false
+	(info_stack)
+)
+
+(defwidget info_stack []
+	(box
+		;; :width 1000
+		;; :height 1000
+		:space-evenly false
+		:orientation "vertical"
+		:class "info_stack"
+		(box
+			:orientation "horizontal"
+			:spacing 10
+			(box
+				:class "tab"
+				:height 70
+				:style "${info_stack_index == 0 ? 'box-shadow: 0 0 8px 0 #AA0000' : ''}"
+				(eventbox
+					:height 30
+					:onclick "${EWW_CMD} update info_stack_index=0"
+					:style "font-size: 20px"
+					"Pictures"
+				)
+			)
+			(box
+				:class "tab"
+				:height 70
+				:style "${info_stack_index == 1 ? 'box-shadow: 0 0 8px 0 #AA0000' : ''}"
+				(eventbox
+					:onclick "${EWW_CMD} update info_stack_index=1"
+					:style "font-size: 20px"
+					"Videos"
+				)
+			)
+			(box
+				:class "tab"
+				:height 70
+				:style "${info_stack_index == 2 ? 'box-shadow: 0 0 8px 0 #AA0000' : ''}"
+				(eventbox
+					;; :onclick "${EWW_CMD} update info_stack_index=2 && echo 1 > ~/.apod_status && ${EWW_CMD} update show_apod_info=true"
+					:style "font-size: 20px"
+					(box
+						:orientation "horizontal"
+						:space-evenly false
+						:halign "center"
+						"APOD"
+						(revealer
+							:transition "slideright"
+							:reveal {apod_status != ""}
+							:duration "500ms"
+							:visible {apod_status == 0}
+							(label
+								:text "󰎔 "
+								:style "color: red; font-size: 25px; margin-left: 5px;"
+							)
+						)
+					)
+				)
+			)
+			(box
+				:class "tab"
+				:height 70
+				:style "${info_stack_index == 3 ? 'box-shadow: 0 0 8px 0 #AA0000' : ''}"
+				(eventbox
+					;; :onclick "${EWW_CMD} update info_stack_index=3 && echo 1 > ~/.chess-puzzle-status && ${EWW_CMD} update chess_puzzle_status=true"
+					:style "font-size: 20px"
+					(box
+						:orientation "horizontal"
+						:space-evenly false
+						:halign "center"
+						(revealer
+							:transition "slideleft"
+							:duration "500ms"
+							:reveal {chess_wasonline == false}
+							:visible {chess_wasonline == false}
+							(label
+								:text " "
+								:style "color: red; font-size: 14px; margin: 0 2px;"
+							)
+						)
+						"Daily Puzzle"
+						(revealer
+							:transition "slideright"
+							:reveal {chess_puzzle_status != ""}
+							:duration "500ms"
+							:visible {chess_puzzle_status == 0}
+							(label
+								:text "󰎔 "
+								:style "color: red; font-size: 25px; margin-left: 5px;"
+							)
+						)
+					)
+				)
+			)
+		)
+		(stack
+			:selected info_stack_index
+			:same-size false
+			(picture)
+			(video)
+			(apod)
+			(chesspuzzle)
+		)
+	)
+)

@@ -1,0 +1,38 @@
+diff --git a/x11-misc/dunst/dunst-1.11.0.ebuild b/x11-misc/dunst/dunst-1.11.0.ebuild
+index c6201fa85..2c7523852 100644
+--- a/x11-misc/dunst/dunst-1.11.0.ebuild
++++ b/x11-misc/dunst/dunst-1.11.0.ebuild
+@@ -17,15 +17,10 @@ IUSE="wayland"
+ DEPEND="
+ 	dev-libs/glib:2
+ 	sys-apps/dbus
+-	x11-libs/cairo[X,glib]
++	x11-libs/cairo[glib]
+ 	x11-libs/gdk-pixbuf:2
+-	x11-libs/libX11
+-	x11-libs/libXext
+-	x11-libs/libXScrnSaver
+-	x11-libs/libXinerama
+-	x11-libs/libXrandr
+ 	x11-libs/libnotify
+-	x11-libs/pango[X]
++	x11-libs/pango
+ 	x11-misc/xdg-utils
+ 	wayland? ( dev-libs/wayland )
+ "
+@@ -60,6 +55,7 @@ src_compile() {
+ 		SYSCONFDIR="${EPREFIX}/etc/xdg"
+ 		SYSTEMD="0"
+ 		WAYLAND="$(usex wayland 1 0)"
++		X11=0
+ 	)
+ 
+ 	emake "${myemakeargs[@]}"
+@@ -71,6 +67,7 @@ src_install() {
+ 		SYSCONFDIR="${ED}/etc/xdg"
+ 		SYSTEMD="0"
+ 		WAYLAND="$(usex wayland 1 0)"
++		X11=0
+ 	)
+ 
+ 	emake "${myemakeargs[@]}" install

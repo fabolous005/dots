@@ -1,0 +1,23 @@
+(defpoll chess_puzzle_url :interval "600s" :initial "https://www.chess.com/daily-chess-puzzle" `cat ~/.chess-puzzle | jq .url`)
+(defpoll chess_puzzle_title :interval "600s" "cat ~/.chess-puzzle | jq -r .title")
+
+
+(defwidget chesspuzzle []
+	(box
+		:orientation "vertical"
+		:space-evenly false
+		(label
+			:text chess_puzzle_title
+			:style "font-size : 24px; margin: 10px; font-style: italic;"
+		)
+		(button
+			:onclick "xdg-open ${chess_puzzle_url}"
+			:style "margin: 5px;"
+			(image
+				:path "/home/fabian/.chess-puzzle.png"
+				:image-width 600
+				:image-height 600
+			)
+		)
+	)
+)

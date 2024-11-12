@@ -1,0 +1,15 @@
+# INFO: currently failing
+# libreoffice => clang flag enforced, therefor libc and due to version bump it's failing
+# cava => due to some autoconf weirdness the ebuild is failing, error upstram merged, but no ebuild
+
+dev-lang/python gcc
+
+gui-apps/hyprspace gcc
+sys-apps/keyutils gcc
+
+dev-util/librnp libstd
+
+dev-build/ninja lld
+
+sys-devel/llvm:18 clang-18
+sys-fs/bcachefs-tools clang-18

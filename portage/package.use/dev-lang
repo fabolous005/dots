@@ -1,0 +1,2 @@
+dev-lang/rust system-llvm clippy rust-analyzer system-llvm wasm rust-src llvm_targets_WebAssembly parallel-compiler rustfmt nightly abi_x86_32 profiler miri
+dev-lang/rust-bin profiler abi_x86_32

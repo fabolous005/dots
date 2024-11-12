@@ -1,0 +1,13 @@
+diff --git a/media-sound/spotify/spotify-1.2.48.ebuild b/media-sound/spotify/spotify-1.2.48.ebuild
+index 2a4aa0f72..7bea6b17c 100644
+--- a/media-sound/spotify/spotify-1.2.48.ebuild
++++ b/media-sound/spotify/spotify-1.2.48.ebuild
+@@ -32,7 +32,7 @@ RDEPEND="
+ 	media-libs/alsa-lib
+ 	media-libs/fontconfig
+ 	media-libs/harfbuzz
+-	media-libs/mesa[X(+)]
++	media-libs/mesa
+ 	net-misc/curl[ssl]
+ 	net-print/cups[ssl(+)]
+ 	sys-apps/dbus

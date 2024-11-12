@@ -1,0 +1,29 @@
+.notification-box {
+  border-radius: 5px;
+  box-shadow: 0 0 4px 2px #ffffff;
+  // background-color: rgba(129, 129, 129, 0.2);
+  padding: 5px;
+  margin: 2px;
+  margin-left: 20px;
+  min-width: 230px;
+}
+
+.single-notification {
+  // box-shadow: 0 0 1px 0.5px #ffffff;
+  border-radius: 5px;
+  padding: 7px 0px;
+}
+
+.single-notification:hover {
+  background-color: rgba(129, 129, 129, 0.5);
+}
+
+.notification-close {
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.notification-close:hover {
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 50%;
+}

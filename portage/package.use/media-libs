@@ -1,0 +1,5 @@
+media-libs/libpng apng
+media-libs/mesa -X -opencl -osmesa -vaapi -vdpau -vulkan -xa
+media-libs/libvpx postproc
+media-libs/libglvnd X
+media-libs/vulkan-loader X
